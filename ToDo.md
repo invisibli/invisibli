@@ -18,14 +18,23 @@ Revise Guides for readability and clearness
 
 Automate OPNsense configuration
 
+Make instructions simpler, people have not and will not read them fully and inevitably break something (aws access keys being the prime example).
+
+Add more if-then statements. For example: 
+- Currently autolaunch.sh checks for instances previously made with the script, and deletes them. With a wait of 30 seconds. Statement there would eliminate the 30 second wait if not needed.
+- When asking if you want to download the OPNsense iso, the usb drive iso writer message shouldn't show if no is selected.
+
 Pickup milk and eggs at the store
+
+Devise way to grab latest OPNsense iso automatically. Removes need to manually update.
 
 Remove sudo from scripts, as multiple systems (arch, gentoo, multipleBSD, redhat etc) don't have it by default.  
 - Figure out better way to either run who scripts as root (not preferred) or running needed commands as root (preferred)  
 
-Seperate code and data in script.sh, possible ways:  
-- have seperate setupVars.conf files for wireguard and pihole automagic installations that are premade and moved via scp when moving script.sh  
-  - would have to run multiple commands to make directories, and move .conf files into needed files in autolaunch.sh *before* starting script.sh  
-- move script.sh and a new second script that contains the portions of script.sh that make directories/make .conf file, seperating them  
-- have both .conf files premade and then after directories are made in script.sh, curl them down into their respective spots (with something like curl -L url/whatever.conf -O (-O preserves file name and type))
+AWS improvments (in autolaunch.sh):
+- Create a new or temporairy user for AWS CLI, as currently the input it asks for will overwrite the current profile (important for people that may use it for work!). Would ask for public key, private key, region (with examples given), and leave default output blank.
+- AMI currently is specific for US-west-1, devise way to take default region supplied and grab latest Ubuntu LTS. This eliminates the need to update the script.
+- Provide an example of what people need to put in aws configure (as a stand-in before making the profile is automated)
+- Eithr silence output for deleting of keys/instances/whatever, as when theres nothing to delete, it gives an error message that doesn't matter but can give user false impression of script failing.
 
+Change wordings on prompts for clarity on whats being asked for, or that commands supplied are for later use.
