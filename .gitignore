@@ -1,0 +1,11 @@
+#Mac General
+.DS_Store
+
+#ssh keys
+*.pem
+
+#text files
+*.txt
+
+# Ignore node_modules folder
+node_modules
