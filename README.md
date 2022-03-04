@@ -8,9 +8,8 @@
 
 
 ## **What is it?**  
-invisib.li will walk you through building up your own VPN solution and (separately) advanced home network which will make your web browsing at home and on the go more secure, more private, more versatile and even block ads!
+invisib.li enables you to easily deploy your own virtual private network solution (VPN) solution at home and on the go. It works with all of your devices, and, optionally provides you an extremely advanced home router which will automatically bring all devices on your home network onto this VPN without any custom software on them. This will enhance your security, privacy, enable you to access any device from anywhere, and even block ads for you both making your experience on the web less annoying and faster.
 
-Ever seen one of those Nord VPN or other VPN advertisements on YouTube videos? This solution is all of that, and more, except that YOU control it, it's cheaper, and if you link it to a local router/firewall (such as the one that we have a guide for), it works on all of your devices on your home network without configuring them. 
 
 This guide has three main parts:
   - Spinning up your own cloud server in AWS's EC2, setting up an ad-blocking DNS server (pihole), configuring your mobile phone to use this VPN even when on the go, and creating an VPN tunnel between your router and that instance.
