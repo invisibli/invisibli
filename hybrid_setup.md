@@ -14,6 +14,11 @@ What does that actually mean?
 - `cd invisibli && ./autolaunch.sh`
 
 
+The beginning of the script asks for the access key's mentioned above. Some notes:
+> CURRENTLY this will overwrite the profile you currently are using/ save them for the first time if you haven't ever entered them before. If you use aws cli for work, please be careful! You may want to create a seperate profile and then continue.   
+> *Known bug: This script was written with the ami for US-west in mind. It will not grab the correct ami if you put anything else in, and will fail. Currently being fixed!*
+> Leave default output to: none. The script specifies output format if needs it.
+
 If the script encounters no issues, after 5ish minutes, you should be fully setup.
 The EC2 instance will reboot and after a few minutes you should be able to reconnect.
 Once it's booted, you will want to set up client configs for your devices following the [Set up wireguard client guide.](./Set_up_wireguard_client.md)
