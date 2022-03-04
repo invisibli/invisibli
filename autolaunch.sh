@@ -58,10 +58,9 @@ sleep 5
 
 aws ec2 delete-key-pair --key-name invisibli
 
-
 # Move to key storage and remove old key from your machine 
 
-rm invisibli.pem
+rm -f invisibli.pem
 
 # generate new key
 
@@ -121,16 +120,13 @@ chmod +x script.sh
 
 # Pulling ssh keys to local machine, connecting to new Ec2 instance, and running the autoinstaller for the ec2 instance
 sleep 2
-scp -i invisibli.pem script.sh ubuntu@$eip:/home/ubuntu
+scp -i invisibli.pem script.sh configs.sh ubuntu@$eip:/home/ubuntu
 sleep 2
-ssh -t -i invisibli.pem ubuntu@$eip 'sudo ./script.sh'
+ssh -t -i invisibli.pem ubuntu@$eip 'sudo ./configs.sh && sudo ./script.sh'
 wait
 
 #cleanup .txt files used to define variables
-rm eip2.txt
-rm eip.txt
-rm instanceid.txt
-rm deleteid.txt
+rm eip2.txt eip.txt instanceid.txt deleteid.txt
 
 #offer download of opnsense iso if wanted
 while true; do
@@ -142,11 +138,7 @@ while true; do
     esac
 done
 
-echo 'Make sure you have balena etcher or another image to usb drive writer utility!'
-
-sleep 5
-
-echo 'Make sure you have balena etcher or another image to usb drive writer utility!'
+echo 'Make sure you have balena etcher or another image to usb drive writer utility if you plan to make a OPNsense router!'
 
 sleep 5
 
