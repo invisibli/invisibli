@@ -10,8 +10,8 @@ The hybrid setup has a fairly simple process:
 
 
 What does that actually mean?    
-- run `git clone https://github.com/alicemara/Test.git` in the location of your choosing on your local mac/linux machine (windows coming soon!)
-- `cd Test && ./autolaunch.sh`
+- run `git clone https://github.com/invisibli/invisibli.git` in the location of your choosing on your local mac/linux machine (windows coming soon!)
+- `cd invisibli && ./autolaunch.sh`
 
 
 If the script encounters no issues, after 5ish minutes, you should be fully setup.
@@ -20,7 +20,7 @@ Once it's booted, you will want to set up client configs for your devices follow
 
 
 <!-- ### Withought using git
-If you would rather not run it via the git cli tools, you could also do `bash <(wget -qO - https://github.com/alicemara/Test/blob/main/scripts/autolaunch.sh)` (may neeed to run as root depending on your setup. -->
+If you would rather not download it via the git cli tools, you could also do `` (may neeed to run as root depending on your setup. -->
 
 ### Troubleshooting
 
