@@ -49,7 +49,7 @@ Once completed, this should allow all the devices in your home, (such as your la
 ## **What's a PiHole?**  
 
 PiHoles are essentially a DNS filter (more commanly known as a DNS Sinkhole). You provide it domains to block, and it will give non-usable addresses when it recieves requests for those domains. If a request is made and it isn't on it's list of domains to block, it will pass the traffic onto an upstream DNS server of your choice.  
-When setting up the pihole, it will come with a pre-made list of ad-domains to block. There are numerous lists out there, and collections of lists, such as https://firebog.net. YOu have ultimate control over these lists and what information your PiHole keeps or doesnt.  
+When setting up the pihole, it will come with a pre-made list of ad-domains to block. There are numerous lists out there, and collections of lists, such as https://firebog.net. You have ultimate control over these lists and what information your PiHole keeps or doesn't.  
 
 [More information on how to use the PiHole from the creators of it.](https://docs.pi-hole.net/)
 
@@ -76,7 +76,7 @@ Hybrid automagic/manual setup[(Steps here)](hybrid_setup.md):
 Bonus!:  
 - [Setting up a wifi access point](Unifi_AP.md) (useful in small apartments/studios)
 
-## **Hard requirements/recommendations**
+## **Hard requirements/recommendations for home router/access point (If you chose to deploy them)**
 
 ### **Hardware used in the guide:**
 * [Intel Xeon NUC 9 Quartz Canyon](https://www.amazon.com/Intel-Nuc-Kit-Nuc9Vxqnx-Cord/dp/B086LFB22V)
