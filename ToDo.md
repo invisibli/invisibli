@@ -8,6 +8,10 @@ Design decisions:
 Make scripts more distro agnostic  
 - Autolaunch.sh is made to work for most debian based distros, will test on Wssl and/or via a PS script on win10 since commands for aws cli are (mostly) the same
 
+Make autolaunch.sh check to see if package is installed, and if not, then install.
+- Currently just tells it to install. While this usually isn't an issue, it can cause potential issues and it REALLY irk's some people.
+- You know know what? Maybe I should leave it in just for that reason.
+
 Make scripts lighterweight and optimize them. 
 - string more commands together 
   - && additional commands only runs if previous command has exit status of zero
