@@ -28,8 +28,16 @@ read -r -p 'Stop and get that if you need it: https://docs.aws.amazon.com/IAM/la
 
 sleep 2
 
-aws configure
+aws configure --profile invisibli
 
+export AWS_PROFILE=invisibli
+
+# Capture desired region of deployment (in case user wants it to be different from profile default)
+# Then change the default for the shell
+
+read -p $'What region would you like to deploy this in? (us-east-2, us-west-1, etc)\n' rgn
+echo $rgn > rgn.txt
+export AWS_DEFAULT_REGION="$rgn"
 
 read -r -p 'First deleting any old instances and any unused elastic ips aka cancel this if thats not ok. This may take a minute. (Press any key to continue)' -n1 -s && echo ' '
 
@@ -38,11 +46,11 @@ aws ec2 describe-instances --filters "Name=instance.group-name,Values='invisibli
 doid=$(cat deleteid.txt)
 aws ec2 terminate-instances --instance-ids $doid
 
-echo "Waiting 30 seconds to allow any extra instances to terminate"
+echo "Waiting 30 seconds to allow any extra instances to terminate..."
 
 sleep 30
 
-echo "Now deleting unused elastic IPs"
+echo "Now deleting unused elastic IPs..."
 
 # Deletes any unssigned elastic IP
 aws ec2 describe-addresses --query 'Addresses[].[AllocationId,AssociationId]' --output text | \
@@ -84,7 +92,11 @@ aws ec2 authorize-security-group-ingress --group-name invisibli --protocol udp -
 
 # spin up new aws instance 
 
-aws ec2 run-instances --image-id ami-08fa7c8891945eae4 --count 1 --instance-type t2.micro --key-name invisibli --security-groups invisibli --tag-specifications 'ResourceType=instance,Tags=[{Key=server,Value=invisibli}]' --no-cli-pager
+aws ec2 describe-images --region $rgn --filters "Name=name,Values=ubuntu/images/hvm-ssd/*20.04-amd64-server-????????" --query "sort_by(Images, &CreationDate)[-1:].[ImageId]" --output text > amiid.txt
+
+amiid=$(cat amiid.txt)
+
+aws ec2 run-instances --region $rgn  --image-id $amiid --count 1 --instance-type t2.micro --key-name invisibli --security-groups invisibli --tag-specifications 'ResourceType=instance,Tags=[{Key=server,Value=invisibli}]' --no-cli-pager
 
 sleep 5
 
@@ -126,19 +138,17 @@ ssh -t -i invisibli.pem ubuntu@$eip 'sudo ./configs.sh && sudo ./script.sh'
 wait
 
 #cleanup .txt files used to define variables
-rm eip2.txt eip.txt instanceid.txt deleteid.txt
+rm eip2.txt eip.txt instanceid.txt deleteid.txt rgn.txt amiid.txt
 
 #offer download of opnsense iso if wanted
 while true; do
     read -p "Do you wish to download the OPNsense iso to make a local machine? (y/n) " yn
     case $yn in
-        [Yy]* ) curl -l https://mirror.sfo12.us.leaseweb.net/opnsense/releases/22.1/OPNsense-22.1-OpenSSL-vga-amd64.img.bz2 > opnsense.img.bz2; break;;
+        [Yy]* ) curl -l https://mirror.sfo12.us.leaseweb.net/opnsense/releases/22.1/OPNsense-22.1-OpenSSL-vga-amd64.img.bz2 > opnsense.img.bz2 && echo 'Make sure you have balena etcher or another image to usb drive writer utility if you plan to make a OPNsense router!'; break;;
         [Nn]* ) exit;;
         * ) echo "Please answer yes or no.";;
     esac
 done
-
-echo 'Make sure you have balena etcher or another image to usb drive writer utility if you plan to make a OPNsense router!'
 
 sleep 5
 

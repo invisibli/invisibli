@@ -36,9 +36,8 @@ Remove sudo from scripts, as multiple systems (arch, gentoo, multipleBSD, redhat
 - Figure out better way to either run who scripts as root (not preferred) or running needed commands as root (preferred)  
 
 AWS improvments (in autolaunch.sh):
-- Create a new or temporairy user for AWS CLI, as currently the input it asks for will overwrite the current profile (important for people that may use it for work!). Would ask for public key, private key, region (with examples given), and leave default output blank.
 - AMI currently is specific for US-west-1, devise way to take default region supplied and grab latest Ubuntu LTS. This eliminates the need to update the script.
 - Provide an example of what people need to put in aws configure (as a stand-in before making the profile is automated)
-- Eithr silence output for deleting of keys/instances/whatever, as when theres nothing to delete, it gives an error message that doesn't matter but can give user false impression of script failing.
+- Either silence output for deleting of keys/instances/whatever, as when theres nothing to delete, it gives an error message that doesn't matter but can give user false impression of script failing.
 
 Change wordings on prompts for clarity on whats being asked for, or that commands supplied are for later use.

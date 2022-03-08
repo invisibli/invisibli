@@ -15,9 +15,9 @@ What does that actually mean?
 
 
 The beginning of the script asks for the access key's mentioned above. Some notes:
-> CURRENTLY this will overwrite the profile you currently are using/ save them for the first time if you haven't ever entered them before. If you use aws cli for work, please be careful! You may want to create a seperate profile and then continue.   
+> Currently, the script makes a new profile and asks for new keys for it. If you already have a profile/keys to use, just run the script without the `aws configure` and `export=AWS_PROFILE` lines.
 > *Known bug: This script was written with the ami for US-west in mind. It will not grab the correct ami if you put anything else in, and will fail. Currently being fixed!*
-> Leave default output to: none. The script specifies output format if needs it.
+> Leave default output to: none. The script specifies output format if needs it. Otherwise you may need to manually exit JSON outputs. Nobody wants to do that.
 
 If the script encounters no issues, after 5ish minutes, you should be fully setup.
 The EC2 instance will reboot and after a few minutes you should be able to reconnect.
