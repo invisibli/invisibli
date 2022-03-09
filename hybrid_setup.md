@@ -3,7 +3,7 @@
 ### Intended setup
 The hybrid setup has a fairly simple process: 
 - You get your [AWS accesskeys](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html) if you haven't already.
--The script will ask for your keys, but you may want to look at [potentially configuring them first](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html)
+-The script will ask for your keys, you may want to look at[an article about that before running this.](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html)
 - Then running the autolaunch.sh script which makes and configures the EC2 instance, then launches the script.sh and configures the server for ad-blocking/sets up VPN server.  
 - After that, you would follow the OPNsense_Guide manual setup guide to finish setup if you want to make the router.  
 - If you would like an easy way to set up a singular wireless access point, there is a [bonus guide for that as well!](./Unifi_AP.md)  
@@ -12,11 +12,15 @@ The hybrid setup has a fairly simple process:
 What does that actually mean?    
 - run `git clone https://github.com/invisibli/invisibli.git` in the location of your choosing on your local mac/linux machine (windows coming soon!)
 - `cd invisibli && ./autolaunch.sh`
+- You will make a/switch to a profile called invisibli and give it access keys.
+- You will tell it which [AWS Region](https://aws.amazon.com/blogs/architecture/what-to-consider-when-selecting-a-region-for-your-workloads/) you want to deploy this server to.
+- Follow the prompts.
+- Done!
 
 
 The beginning of the script asks for the access key's mentioned above. Some notes:
-> Currently, the script makes a new profile and asks for new keys for it. If you already have a profile/keys to use, just run the script without the `aws configure` and `export=AWS_PROFILE` lines.
-> *Known bug: This script was written with the ami for US-west in mind. It will not grab the correct ami if you put anything else in, and will fail. Currently being fixed!*
+> Currently, the script makes/switches to a profile called invisibli and asks for new keys for it. If you already have a profile/keys to use, you can run the script without the `aws configure` and `export=AWS_PROFILE` lines.
+> If you run the script a second time, you should be able to just hit enter through the four configure options if you already gave the invisibli profile keys.
 > Leave default output to: none. The script specifies output format if needs it. Otherwise you may need to manually exit JSON outputs. Nobody wants to do that.
 
 If the script encounters no issues, after 5ish minutes, you should be fully setup.
