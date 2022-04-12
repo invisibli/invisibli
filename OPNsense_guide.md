@@ -387,36 +387,6 @@ Fill in the following fields. If a field is not given, leave it blank or at the 
 Click Save and then Apply Changes  
 
 ![opn21](https://git-pics-666.s3.us-west-1.amazonaws.com/git-pics/opn21.png)
-
-**Inbound Firewall Rules**  
-   
-**LAN**  
-
-Go to Firewall and then Rules on the lefthand menu.   
-
-Go to LAN and click the orange + to make a new rule.  
-
-Fill in the following fields. If a field is not given, leave it blank or at the default value.  
-
-* Action: Pass  
-
-* Disabled: Unchecked  
-
-* Quick: Checked  
-
-* Interface: Lan  
-
-* Direction: In  
-
-* TCP/IP Version: IPv4  
-
-* Protocol: Any  
-
-* Source: Lan Net  
-
-* Destination: Any  
-
-Click Save and Apply changes.  
   
 **Configuring WireGuard Interface**  
 
@@ -443,6 +413,8 @@ Fill in the following fields. If a field is not given, leave it blank or at the 
 * Source: Any  
 
 * Source port range: In both fields select (other) and put in the port for WG that you have been using. (51820 is the default and what has been used in this guide)  
+
+> (You may need to hit Advanced under the Source field to be able to be able to input port ranges)
 
 * Destination: Any  
 
