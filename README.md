@@ -63,13 +63,13 @@ Some websites may block YOU, because they block connections from AWS in an effor
 ## **How to use this guide**  
 There are two paths to using this guide:
 
-Manually setting up each part[(Steps here)](Manual_setup_Guide.md):  
-- [Making the EC2 instance and configuring the server](EC2_Manual_Setup.md)  
-- [Setting up home router](OPNsense_guide.md)  
-
 Hybrid automagic/manual setup[(Steps here)](hybrid_setup.md):
 - Running the ['autolaunch.sh'](autolaunch.sh) script that makes and configures the EC2 instance, then launches the ['script.sh'](script.sh) and configures the server for ad-blocking/sets up VPN server
 - [Setting up home router](OPNsense_guide.md)
+
+Manually setting up each part[(Steps here)](Manual_setup_Guide.md):  
+- [Making the EC2 instance and configuring the server](EC2_Manual_Setup.md)  
+- [Setting up home router](OPNsense_guide.md)  
 
 >Fully automagic setup coming soon!
 
