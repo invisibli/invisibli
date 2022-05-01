@@ -6,7 +6,8 @@
 # Floss more
 # Test on more platforms. So far, testing has been done on: osx (Darwin)
 
-
+#cleanup .txt files used to define variables if script was interrupted before cleanup previously
+rm -f eip2.txt eip.txt instanceid.txt deleteid.txt rgn.txt amiid.txt
 
 # Check package manager and download awscli
 # From: https://unix.stackexchange.com/a/571192
@@ -138,7 +139,7 @@ ssh -t -i ./invisibli.pem ubuntu@$eip 'sudo ./configs.sh && sudo ./script.sh'
 wait
 
 #cleanup .txt files used to define variables
-rm eip2.txt eip.txt instanceid.txt deleteid.txt rgn.txt amiid.txt
+rm -f eip2.txt eip.txt instanceid.txt deleteid.txt rgn.txt amiid.txt
 
 #offer download of opnsense iso if wanted
 while true; do
