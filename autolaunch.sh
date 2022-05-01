@@ -132,9 +132,9 @@ chmod +x script.sh
 
 # Pulling ssh keys to local machine, connecting to new Ec2 instance, and running the autoinstaller for the ec2 instance
 sleep 2
-scp -i invisibli.pem script.sh configs.sh ubuntu@$eip:/home/ubuntu
+scp -i ./invisibli.pem script.sh configs.sh ubuntu@$eip:/home/ubuntu
 sleep 2
-ssh -t -i invisibli.pem ubuntu@$eip 'sudo ./configs.sh && sudo ./script.sh'
+ssh -t -i ./invisibli.pem ubuntu@$eip 'sudo ./configs.sh && sudo ./script.sh'
 wait
 
 #cleanup .txt files used to define variables
@@ -142,7 +142,7 @@ rm eip2.txt eip.txt instanceid.txt deleteid.txt rgn.txt amiid.txt
 
 #offer download of opnsense iso if wanted
 while true; do
-    read -p "Do you wish to download the OPNsense iso to make a local machine? (y/n) " yn
+    read -p "Do you wish to download the OPNsense iso to make a local router to conenct to your server? (y/n) " yn
     case $yn in
         [Yy]* ) curl -l https://mirror.sfo12.us.leaseweb.net/opnsense/releases/22.1/OPNsense-22.1-OpenSSL-vga-amd64.img.bz2 > opnsense.img.bz2 && echo 'Make sure you have balena etcher or another image to usb drive writer utility if you plan to make a OPNsense router!'; break;;
         [Nn]* ) exit;;
