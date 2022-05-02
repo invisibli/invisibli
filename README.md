@@ -83,7 +83,10 @@ Yes, all these are possible, but I can't support every possible configuration an
 **AWS Cloud Account required:**
 
 If you don't have one, [create a free Amazon Web Services (AWS)](https://aws.amazon.com/free) account.
-If you plan on following the automatic guide, you will need your [AWS accesskeys.](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html)
+If you plan on following the automatic guide, you will need your [AWS accesskeys.](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html)  
+
+> Make sure you have the appropriate permissions to make/delete EC2 instances, keypairs, security groups, elastic ips in IAM! 
+
 
 **Pre-Download (if following the router guide):**  
 
