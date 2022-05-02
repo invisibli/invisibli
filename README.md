@@ -4,6 +4,7 @@
 - [**What is it?**](#what-is-it)
 - [**Why use invisib.li?**](#why-use-invisibli)
 - [**How hard is it to set up?**](#how-hard-is-it-to-set-up)
+- [**Hardware and Software requirments**](#hardware-and-software-requirments)
 - [**How to set up**](#how-to-set-up)
 - [**Troubleshooting**](#troubleshooting)
 
@@ -60,7 +61,7 @@ When setting up the pihole, it will come with a pre-made list of ad-domains to b
 
 ### **[More questions?](FAQ.md)**
 
-## **Hardware/Software requirments**
+## **Hardware and Software requirments**
 
 ### **Hardware used in the guide:**
 * [Intel Xeon NUC 9 Quartz Canyon](https://www.amazon.com/Intel-Nuc-Kit-Nuc9Vxqnx-Cord/dp/B086LFB22V)
