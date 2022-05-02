@@ -78,7 +78,7 @@ Technically you can skip it if you just want to configure VPN clients on just a 
 
 Yes, all these are possible, but I can't support every possible configuration and still make this simple. This is a known good configuration that is fairly turn key and I've documented it end to end. You can absolutely modify this, and the information in this guide will save you a ton of time, but your millage may vary. 
 
-## **Software requirments**
+### **Software requirments**
 
 **AWS Cloud Account required:**
 
