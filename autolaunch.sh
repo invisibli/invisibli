@@ -6,6 +6,9 @@
 # Floss more
 # Test on more platforms. So far, testing has been done on: osx (Darwin)
 
+# debug
+#set -x -v
+
 #cleanup .txt files used to define variables if script was interrupted before cleanup previously
 rm -f eip2.txt eip.txt instanceid.txt deleteid.txt rgn.txt amiid.txt
 
@@ -22,6 +25,20 @@ elif [ -x "$(command -v yum)" ];     then sudo yum install $packagesNeeded
 
 else echo "FAILED TO INSTALL PACKAGE: Package manager not found. You must manually install: $packagesNeeded">&2; 
 fi
+
+test_aws_cli_versioncheck() {
+  # Check installed cli not too old
+  # example of too old... aws-cli/2.0.39 Python/3.7.4 Darwin/21.3.0 exe/x86_64
+  # latest (May 2022) aws-cli/2.6.1 Python/3.9.11 Darwin/21.3.0 exe/x86_64 prompt/off
+  local AWSCLI_VERSION=$(aws --version | grep -Eo '[0-9]\.[0-9]+' | head -1)
+  echo "Using AWS CLI version ${AWSCLI_VERSION}"
+  if [[ "${AWSCLI_VERSION}" =~ ^[1-2]\.[1-5]$ ]]; then
+    echo "Error: Hey, your aws-cli is likely too old"
+    exit 1
+  fi
+}
+
+test_aws_cli_versioncheck
 
 # Having user add aws access keys to be able to run script
 echo "You will need your access key from your AWS account to paste into the next step" 
