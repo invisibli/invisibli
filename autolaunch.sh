@@ -1,10 +1,13 @@
 #!/bin/bash
 
-# TODO 
+# TODO
 # Be kinder to myself
 # Watch the weight
 # Floss more
 # Test on more platforms. So far, testing has been done on: osx (Darwin)
+
+# debug
+#set -x -v
 
 #cleanup .txt files used to define variables if script was interrupted before cleanup previously
 rm -f eip2.txt eip.txt instanceid.txt deleteid.txt rgn.txt amiid.txt
@@ -13,18 +16,39 @@ rm -f eip2.txt eip.txt instanceid.txt deleteid.txt rgn.txt amiid.txt
 # From: https://unix.stackexchange.com/a/571192
 
 packagesNeeded='awscli'
-if [ -x "$(command -v apk)" ];       then sudo apk add --no-cache $packagesNeeded
-elif [ -x "$(command -v brew)" ];    then brew install $packagesNeeded
-elif [ -x "$(command -v apt-get)" ]; then sudo apt-get install $packagesNeeded
-elif [ -x "$(command -v dnf)" ];     then sudo dnf install $packagesNeeded
-elif [ -x "$(command -v zypper)" ];  then sudo zypper install $packagesNeeded
-elif [ -x "$(command -v yum)" ];     then sudo yum install $packagesNeeded
+if [ -x "$(command -v apk)" ]; then
+  sudo apk add --no-cache $packagesNeeded
+elif [ -x "$(command -v brew)" ]; then
+  brew install $packagesNeeded
+elif [ -x "$(command -v apt-get)" ]; then
+  sudo apt-get install $packagesNeeded
+elif [ -x "$(command -v dnf)" ]; then
+  sudo dnf install $packagesNeeded
+elif [ -x "$(command -v zypper)" ]; then
+  sudo zypper install $packagesNeeded
+elif [ -x "$(command -v yum)" ]; then
+  sudo yum install $packagesNeeded
 
-else echo "FAILED TO INSTALL PACKAGE: Package manager not found. You must manually install: $packagesNeeded">&2; 
+else
+  echo "FAILED TO INSTALL PACKAGE: Package manager not found. You must manually install: $packagesNeeded" >&2
 fi
 
+test_aws_cli_versioncheck() {
+  # Check installed cli not too old
+  # example of too old... aws-cli/2.0.39 Python/3.7.4 Darwin/21.3.0 exe/x86_64
+  # latest (May 2022) aws-cli/2.6.1 Python/3.9.11 Darwin/21.3.0 exe/x86_64 prompt/off
+  local AWSCLI_VERSION=$(aws --version | grep -Eo '[0-9]\.[0-9]+' | head -1)
+  echo "Using AWS CLI version ${AWSCLI_VERSION}"
+  if [[ "${AWSCLI_VERSION}" =~ ^[1-2]\.[1-5]$ ]]; then
+    echo "Error: Hey, your aws-cli is likely too old"
+    exit 1
+  fi
+}
+
+test_aws_cli_versioncheck
+
 # Having user add aws access keys to be able to run script
-echo "You will need your access key from your AWS account to paste into the next step" 
+echo "You will need your access key from your AWS account to paste into the next step"
 read -r -p 'Stop and get that if you need it: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey_CLIAPI (Press any key to continue)' -n1 -s && echo ' '
 
 sleep 2
@@ -37,13 +61,13 @@ export AWS_PROFILE=invisibli
 # Then change the default for the shell
 
 read -p $'What region would you like to deploy this in? (us-east-2, us-west-1, etc)\n' rgn
-echo $rgn > rgn.txt
+echo $rgn >rgn.txt
 export AWS_DEFAULT_REGION="$rgn"
 
 read -r -p 'First deleting any old instances and any unused elastic ips aka cancel this if thats not ok. This may take a minute. (Press any key to continue)' -n1 -s && echo ' '
 
 # Deletes any instances with invisibli tag
-aws ec2 describe-instances --filters "Name=instance.group-name,Values='invisibli'" --output text --query 'Reservations[*].Instances[*].InstanceId' > deleteid.txt
+aws ec2 describe-instances --filters "Name=instance.group-name,Values='invisibli'" --output text --query 'Reservations[*].Instances[*].InstanceId' >deleteid.txt
 doid=$(cat deleteid.txt)
 aws ec2 terminate-instances --instance-ids $doid
 
@@ -54,9 +78,9 @@ sleep 30
 echo "Now deleting unused elastic IPs..."
 
 # Deletes any unssigned elastic IP
-aws ec2 describe-addresses --query 'Addresses[].[AllocationId,AssociationId]' --output text | \
-awk '$2 == "None" { print $1 }' | \
-xargs -I {} aws ec2 release-address --allocation-id {}
+aws ec2 describe-addresses --query 'Addresses[].[AllocationId,AssociationId]' --output text |
+  awk '$2 == "None" { print $1 }' |
+  xargs -I {} aws ec2 release-address --allocation-id {}
 
 sleep 10
 
@@ -67,13 +91,13 @@ sleep 5
 
 aws ec2 delete-key-pair --key-name invisibli
 
-# Move to key storage and remove old key from your machine 
+# Move to key storage and remove old key from your machine
 
 rm -f invisibli.pem
 
 # generate new key
 
-aws ec2 create-key-pair --key-name invisibli --query 'KeyMaterial' --output text > invisibli.pem
+aws ec2 create-key-pair --key-name invisibli --query 'KeyMaterial' --output text >invisibli.pem
 
 # set key permissions
 
@@ -91,13 +115,13 @@ aws ec2 authorize-security-group-ingress --group-name invisibli --protocol tcp -
 
 aws ec2 authorize-security-group-ingress --group-name invisibli --protocol udp --port 51820 --cidr "0.0.0.0/0"
 
-# spin up new aws instance 
+# spin up new aws instance
 
-aws ec2 describe-images --region $rgn --filters "Name=name,Values=ubuntu/images/hvm-ssd/*20.04-amd64-server-????????" --query "sort_by(Images, &CreationDate)[-1:].[ImageId]" --output text > amiid.txt
+aws ec2 describe-images --region $rgn --filters "Name=name,Values=ubuntu/images/hvm-ssd/*20.04-amd64-server-????????" --query "sort_by(Images, &CreationDate)[-1:].[ImageId]" --output text >amiid.txt
 
 amiid=$(cat amiid.txt)
 
-aws ec2 run-instances --region $rgn  --image-id $amiid --count 1 --instance-type t2.micro --key-name invisibli --security-groups invisibli --tag-specifications 'ResourceType=instance,Tags=[{Key=server,Value=invisibli}]' --no-cli-pager
+aws ec2 run-instances --region $rgn --image-id $amiid --count 1 --instance-type t2.micro --key-name invisibli --security-groups invisibli --tag-specifications 'ResourceType=instance,Tags=[{Key=server,Value=invisibli}]' --no-cli-pager
 
 sleep 5
 
@@ -106,17 +130,17 @@ echo "Giving the instance 30 seconds to get provisioned"
 sleep 30
 
 # get the instance ID of the new EC2 instance
-aws ec2 describe-instances --filters "Name=instance.group-name,Values='invisibli'" --output text --query 'Reservations[*].Instances[*].InstanceId' > instanceid.txt
+aws ec2 describe-instances --filters "Name=instance.group-name,Values='invisibli'" --output text --query 'Reservations[*].Instances[*].InstanceId' >instanceid.txt
 
 #make the instance id a variable
 iid=$(cat instanceid.txt)
 
 #allocate a elastic IP & describe it
 aws ec2 allocate-address --tag-specifications 'ResourceType=elastic-ip,Tags=[{Key=server,Value=invisibli}]'
-aws ec2 describe-addresses --filters Name=tag:server,Values=invisibli  --output text  > eip.txt
+aws ec2 describe-addresses --filters Name=tag:server,Values=invisibli --output text >eip.txt
 
 #define elastic as a variable
-grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' eip.txt > eip2.txt
+grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' eip.txt >eip2.txt
 eip=$(cat eip2.txt)
 
 # then associate it with the made ec2
@@ -143,12 +167,15 @@ rm -f eip2.txt eip.txt instanceid.txt deleteid.txt rgn.txt amiid.txt
 
 #offer download of opnsense iso if wanted
 while true; do
-    read -p "Do you wish to download the OPNsense iso to make a local router to conenct to your server? (y/n) " yn
-    case $yn in
-        [Yy]* ) curl -l https://mirror.sfo12.us.leaseweb.net/opnsense/releases/22.1/OPNsense-22.1-OpenSSL-vga-amd64.img.bz2 > opnsense.img.bz2 && echo 'Make sure you have balena etcher or another image to usb drive writer utility if you plan to make a OPNsense router!'; break;;
-        [Nn]* ) exit;;
-        * ) echo "Please answer yes or no.";;
-    esac
+  read -p "Do you wish to download the OPNsense iso to make a local router to conenct to your server? (y/n) " yn
+  case $yn in
+  [Yy]*)
+    curl -l https://mirror.sfo12.us.leaseweb.net/opnsense/releases/22.1/OPNsense-22.1-OpenSSL-vga-amd64.img.bz2 >opnsense.img.bz2 && echo 'Make sure you have balena etcher or another image to usb drive writer utility if you plan to make a OPNsense router!'
+    break
+    ;;
+  [Nn]*) exit ;;
+  *) echo "Please answer yes or no." ;;
+  esac
 done
 
 sleep 5
