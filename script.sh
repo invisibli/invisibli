@@ -5,6 +5,11 @@
 # https://github.com/pivpn/pivpn
 # https://github.com/pi-hole/pi-hole
 
+#22.04 has set needrestart to automaticlly be interactive, this just changes it to automatic
+#If you want it to be interactive again change the line in /etc/needrestart/needrestart.conf from:
+# '$nrconf{restart} = 'a'' to '#$nrconf{restart} = 'i'' 
+sed -i 's/#$nrconf{restart} = '"'"'i'"'"';/$nrconf{restart} = '"'"'a'"'"';/g' /etc/needrestart/needrestart.conf
+
 apt-get -y update
 
 wait

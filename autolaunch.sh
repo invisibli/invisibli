@@ -93,7 +93,7 @@ aws ec2 authorize-security-group-ingress --group-name invisibli --protocol udp -
 
 # spin up new aws instance 
 
-aws ec2 describe-images --region $rgn --filters "Name=name,Values=ubuntu/images/hvm-ssd/*20.04-amd64-server-????????" --query "sort_by(Images, &CreationDate)[-1:].[ImageId]" --output text > amiid.txt
+aws ec2 describe-images --region $rgn --filters "Name=name,Values=ubuntu/images/hvm-ssd/*22.04-amd64-server-????????" --query "sort_by(Images, &CreationDate)[-1:].[ImageId]" --output text > amiid.txt
 
 amiid=$(cat amiid.txt)
 
@@ -133,9 +133,9 @@ chmod +x script.sh
 
 # Pulling ssh keys to local machine, connecting to new Ec2 instance, and running the autoinstaller for the ec2 instance
 sleep 2
-scp -i ./invisibli.pem script.sh configs.sh ubuntu@$eip:/home/ubuntu
+scp -i "invisibli.pem" script.sh configs.sh ubuntu@$eip:/home/ubuntu
 sleep 2
-ssh -t -i ./invisibli.pem ubuntu@$eip 'sudo ./configs.sh && sudo ./script.sh'
+ssh -t -i "invisibli.pem" ubuntu@$eip 'sudo ./configs.sh && sudo ./script.sh'
 wait
 
 #cleanup .txt files used to define variables
